@@ -1,41 +1,180 @@
 <template>
-    <div>
-        <section id="bracket">
+    <div data-app>
+        <div v-if="countUsers <= 16">
+            <section id="bracket" >
+                <div class="container">
+                    <div class="split split-one">
+                        <div class="round round-one current">
+                            <div class="round-details">Round 1</div>
+                            <ul class="matchup"
+                                v-for="(people, i) in firstBlock"
+                                :key="i"
+                            >
+                                <li
+                                        class="team team-top"
+                                        v-for="(peopleNumber, j) in people"
+                                        :key="j"
+                                        @click.prevent="firstRoundLeft"
+                                >{{peopleNumber.secondName}} {{peopleNumber.firstName}} <span class="score">{{i+1}}</span></li>
+                            </ul>
+                        </div>	<!-- END ROUND ONE -->
+
+                        <div class="round round-two">
+                            <div class="round-details">Round 2</div>
+                            <!--<ul class="matchup"-->
+                                <!--v-for="n in leftNumber2"-->
+                                <!--:data-number="'r2left' + n"-->
+                                <!--@click.prevent="secondRoundLeft"-->
+                            <!--&gt;-->
+                                <!--<li class="team team-top" v-html="this.champions.r2left1Top"></li>-->
+                                <!--<li class="team team-bottom">&nbsp;<span class="score">&nbsp;</span></li>-->
+                            <!--</ul>-->
+                            <ul class="matchup"
+                                data-number="r2left1"
+                                @click.prevent="secondRoundLeft"
+                            >
+                                <li class="team team-top" v-html="this.champions.r2left1Top"></li>
+                                <li class="team team-bottom" v-html="this.champions.r2left1Bot"></li>
+                            </ul>
+                            <ul class="matchup"
+                                data-number="r2left2"
+                                @click.prevent="secondRoundLeft"
+                            >
+                                <li class="team team-top" v-html="this.champions.r2left2Top"></li>
+                                <li class="team team-bottom" v-html="this.champions.r2left2Top"></li>
+                            </ul>
+                        </div>	<!-- END ROUND TWO -->
+                    </div>
+
+                    <div class="champion">
+                        <div class="semis-l">
+                            <div class="round-details">west semifinals</div>
+                            <ul
+                                    class ="matchup championship west"
+                                    data-number="r3left1"
+                                    @click.prevent="thirdRoundLeft"
+                            >
+                                <li class="team team-top" v-html="this.champions.r3left1Top"></li>
+                                <li class="team team-bottom" v-html="this.champions.r3left1Bot"></li>
+                            </ul>
+                        </div>
+                        <div class="final">
+                            <i class="fa fa-trophy"></i>
+                            <div class="round-details">championship</div>
+                            <ul
+                                class ="matchup championship"
+                                data-number="r4"
+                                @click.prevent="final"
+                            >
+                                <li class="team team-top final__element" v-html="this.champions.r4Top"></li>
+                                <li class="team team-bottom final__element" v-html="this.champions.r4Bot"></li>
+                            </ul>
+                        </div>
+                        <div class="semis-r">
+                            <div class="round-details">east semifinals</div>
+                            <ul
+                                    class ="matchup championship east"
+                                    data-number="r3left2"
+                                    @click.prevent="thirdRoundRight"
+                            >
+                                <li class="team team-top" v-html="this.champions.r3right1Top"></li>
+                                <li class="team team-bottom" v-html="this.champions.r3right1Bot"></li>
+                            </ul>
+                        </div>
+                    </div>
+
+
+                    <div class="split split-two">
+                        <div class="round round-two">
+                            <div class="round-details">Round 2</div>
+                            <!--<ul-->
+                                    <!--class="matchup"-->
+                                    <!--v-for="n in rightNumber2"-->
+                                    <!--:data-number="'r2right' + n"-->
+                                    <!--@click.prevent="secondRoundRight"-->
+                            <!--&gt;-->
+                                <!--<li class="team team-top">&nbsp;<span class="score">&nbsp;</span></li>-->
+                                <!--<li class="team team-bottom">&nbsp;<span class="score">&nbsp;</span></li>-->
+                            <!--</ul>-->
+                            <ul
+                                    class="matchup"
+                                    data-number="r2right1"
+                                    @click.prevent="secondRoundRight"
+                            >
+                                <li class="team team-top" v-html="this.champions.r2right1Top"></li>
+                                <li class="team team-bottom" v-html="this.champions.r2right1Bot">></li>
+                            </ul>
+                            <ul
+                                    class="matchup"
+                                    data-number="r2right2"
+                                    @click.prevent="secondRoundRight"
+                            >
+                                <li class="team team-top" v-html="this.champions.r2right2Top"></li>
+                                <li class="team team-bottom" v-html="this.champions.r2right2Bot"></li>
+                            </ul>
+                        </div>	<!-- END ROUND TWO -->
+                        <div class="round round-one current">
+                            <div class="round-details">Round 1</div>
+                            <ul class="matchup"
+                                v-for="(people, i) in secondBlock"
+                                :key="i"
+                            >
+                                <li
+                                        class="team team-top"
+                                        v-for="(peopleNumber, j) in people"
+                                        :key="j"
+                                        @click.prevent="firstRoundRight"
+                                >{{peopleNumber.secondName}} {{peopleNumber.firstName}} <span class="score">{{i+1}}</span></li>
+                            </ul>
+                        </div>	<!-- END ROUND ONE -->
+                    </div>
+                </div>
+            </section>
+
+            <div class="container">
+                <v-select
+                        v-model="value"
+                        :items="items"
+                        label="Добавить новых участников"
+                        multiple
+                >
+                    <template v-slot:selection="{ item, index }">
+                        <v-chip v-if="index === 0">
+                            <span>{{ item }}</span>
+                        </v-chip>
+                        <span
+                                v-if="index === 1"
+                                class="grey--text caption"
+                        >(+{{ value.length - 1 }} others)   </span>
+                    </template>
+                </v-select>
+            </div>
+            <div class="profile__block-btn">
+                <!--<v-btn class="profile__btn" color="#ed4d34" @click.prevent="randomPlace">-->
+                    <!--Перемешать участников-->
+                <!--</v-btn>-->
+                <v-btn class="profile__btn" color="#ed4d34" @click.prevent="addPeople">
+                    Добавить  участников
+                </v-btn>
+                <v-btn class="profile__btn" color="#ed4d34" @click.prevent="saveResults">
+                    Cохранить результаты
+                </v-btn>
+            </div>
+        </div>
+        <section id="bracket" v-else>
             <div class="container">
                 <div class="split split-one">
                     <div class="round round-one current">
                         <div class="round-details">Round 1<br/><span class="date">March 16</span></div>
-                        <ul class="matchup">
-                            <li class="team team-top">Duke<span class="score">76</span></li>
-                            <li class="team team-bottom">Virginia<span class="score">82</span></li>
-                        </ul>
-                        <ul class="matchup">
-                            <li class="team team-top">Wake Forest<span class="score">64</span></li>
-                            <li class="team team-bottom">Clemson<span class="score">56</span></li>
-                        </ul>
-                        <ul class="matchup">
-                            <li class="team team-top">North Carolina<span class="score">68</span></li>
-                            <li class="team team-bottom">Florida State<span class="score">54</span></li>
-                        </ul>
-                        <ul class="matchup">
-                            <li class="team team-top">NC State<span class="score">74</span></li>
-                            <li class="team team-bottom">Maryland<span class="score">92</span></li>
-                        </ul>
-                        <ul class="matchup">
-                            <li class="team team-top">Georgia Tech<span class="score">78</span></li>
-                            <li class="team team-bottom">Georgia<span class="score">80</span></li>
-                        </ul>
-                        <ul class="matchup">
-                            <li class="team team-top">Auburn<span class="score">64</span></li>
-                            <li class="team team-bottom">Florida<span class="score">63</span></li>
-                        </ul>
-                        <ul class="matchup">
-                            <li class="team team-top">Kentucky<span class="score">70</span></li>
-                            <li class="team team-bottom">Alabama<span class="score">59</span></li>
-                        </ul>
-                        <ul class="matchup">
-                            <li class="team team-top">Vanderbilt<span class="score">64</span></li>
-                            <li class="team team-bottom">Gonzaga<span class="score">68</span></li>
+                        <ul class="matchup"
+                            v-for="(people, i) in firstBlock"
+                            :key="i"
+                        >
+                            <li
+                                    class="team team-top"
+                                    v-for="(peopleNumber, i) in people"
+                                    :key="i"
+                            >{{peopleNumber.secondName}} {{peopleNumber.firstName}}</li>
                         </ul>
                     </div>	<!-- END ROUND ONE -->
 
@@ -134,47 +273,18 @@
                     </div>	<!-- END ROUND TWO -->
                     <div class="round round-one current">
                         <div class="round-details">Round 1<br/><span class="date">March 16</span></div>
-                        <ul class="matchup">
-                            <li class="team team-top">Minnesota<span class="score">62</span></li>
-                            <li class="team team-bottom">Northwestern<span class="score">54</span></li>
-                        </ul>
-                        <ul class="matchup">
-                            <li class="team team-top">Michigan<span class="score">68</span></li>
-                            <li class="team team-bottom">Iowa<span class="score">66</span></li>
-                        </ul>
-                        <ul class="matchup">
-                            <li class="team team-top">Illinois<span class="score">64</span></li>
-                            <li class="team team-bottom">Wisconsin<span class="score">56</span></li>
-                        </ul>
-                        <ul class="matchup">
-                            <li class="team team-top">Purdue<span class="score">36</span></li>
-                            <li class="team team-bottom">Boise State<span class="score">40</span></li>
-                        </ul>
-                        <ul class="matchup">
-                            <li class="team team-top">Penn State<span class="score">38</span></li>
-                            <li class="team team-bottom">Indiana<span class="score">44</span></li>
-                        </ul>
-                        <ul class="matchup">
-                            <li class="team team-top">Ohio State<span class="score">52</span></li>
-                            <li class="team team-bottom">VCU<span class="score">80</span></li>
-                        </ul>
-                        <ul class="matchup">
-                            <li class="team team-top">USC<span class="score">58</span></li>
-                            <li class="team team-bottom">Cal<span class="score">59</span></li>
-                        </ul>
-                        <ul class="matchup">
-                            <li class="team team-top">Virginia Tech<span class="score">74</span></li>
-                            <li class="team team-bottom">Dartmouth<span class="score">111</span></li>
+                        <ul class="matchup"
+                            v-for="(people, i) in secondBlock"
+                            :key="i"
+                        >
+                            <li
+                                    class="team team-top"
+                                    v-for="(peopleNumber, i) in people"
+                                    :key="i"
+                            >{{peopleNumber.secondName}} {{peopleNumber.firstName}}</li>
                         </ul>
                     </div>	<!-- END ROUND ONE -->
                 </div>
-            </div>
-        </section>
-        <section class="share">
-            <div class="share-wrap">
-                <a class="share-icon" href="https://twitter.com/_joebeason"><i class="fa fa-twitter"></i></a>
-                <a class="share-icon" href="#"><i class="fa fa-facebook"></i></a>
-                <a class="share-icon" href="#"><i class="fa fa-envelope"></i></a>
             </div>
         </section>
     </div>
@@ -186,6 +296,15 @@
         data () {
             return {
                 tournament: {},
+                firstBlock: [],
+                secondBlock: [],
+                countUsers: 0,
+                leftNumber2: 0,
+                rightNumber2: 0,
+                items: [],
+                value: [],
+                valueCategory: [],
+                champions: {}
             }
         },
         async mounted() {
@@ -196,8 +315,29 @@
                 ...tournament,
             }
 
+            this.champions = tournament.champions
+
+            let name = await this.$store.dispatch('fetchUsers')
+            let user = await this.$store.dispatch('fetchAllUser')
+
+            let nameNew = name
+            let userNew = user
+
+            for (let i = 0; i < user.length; i++) {
+                for (let j = 0; j < this.tournament.peopleInfo.length; j++) {
+                    if (user[i].id == this.tournament.peopleInfo[j].id) {
+                        userNew = userNew.filter(item => item !== user[i])
+                        nameNew = nameNew.filter(item => item !== user[i].secondName + ' ' + user[i].firstName)
+                    }
+                }
+            }
+
+            this.items = nameNew
+            this.valueCategory = userNew
+
+            this.countUsers = this.tournament.peopleInfo.length
+
             let member = this.tournament.peopleInfo
-            let memberGrid = []
 
             let array = member; //массив, можно использовать массив объектов
             let size = 2; //размер подмассива
@@ -205,7 +345,323 @@
             for (let i = 0; i <Math.ceil(array.length/size); i++){
                 subarray[i] = array.slice((i*size), (i*size) + size);
             }
-            console.log(subarray);
+
+            this.firstBlock = subarray.slice(0,subarray.length/2);
+            this.secondBlock = subarray.slice(subarray.length/2,subarray.length);
+
+            this.leftNumber2 = Math.round(this.firstBlock.length/2)
+            this.rightNumber2 = Math.round(this.secondBlock.length/2)
+        },
+        methods: {
+            async addPeople() {
+
+                let checkCategory = [];
+
+                for (let i = 0; i < this.value.length; i++) {
+                    for (let j = 0; j < this.valueCategory.length; j++) {
+
+                        if( this.value[i] == (this.valueCategory[j].secondName + ' ' + this.valueCategory[j].firstName)) {
+                            checkCategory.push(this.valueCategory[j].id)
+                        }
+                    }
+                }
+
+                let peopleInfo = this.tournament.peopleInfo
+
+                let user = await this.$store.dispatch('fetchAllUser')
+
+                for (let i = 0; i < user.length; i++) {
+
+                    for (let j = 0; j < checkCategory.length; j++) {
+                        if (user[i].id == checkCategory[j]) {
+
+                            peopleInfo.push({
+                                id: user[i].id,
+                                firstName: user[i].firstName,
+                                secondName: user[i].secondName,
+                                category: user[i].category,
+                                firstTry: 0,
+                                secondTry: 0
+                            })
+                        }
+                    }
+                }
+
+                this.tournament.peopleInfo = peopleInfo
+
+                try {
+                    let tournamentId = this.$route.params.id
+
+                    await this.$store.dispatch('updateTournament', {
+                        peopleInfo: peopleInfo,
+                        id: tournamentId
+                    })
+
+                    let message = document.getElementsByClassName('message-block2')[0];
+                    message.classList.remove('message-block2--none');
+                    setTimeout(function() {
+                        message.classList.add('message-block2--none');
+                    }, 3500)
+                } catch (e) {}
+
+                let id = this.$route.params.id
+                let tournament = await this.$store.dispatch('fetchTournamentById', id)
+
+                this.tournament = {
+                    ...tournament,
+                }
+
+                let name = await this.$store.dispatch('fetchUsers')
+                // let user = await this.$store.dispatch('fetchAllUser')
+
+                let nameNew = name
+                let userNew = user
+
+                for (let i = 0; i < user.length; i++) {
+                    for (let j = 0; j < this.tournament.peopleInfo.length; j++) {
+                        if (user[i].id == this.tournament.peopleInfo[j].id) {
+                            userNew = userNew.filter(item => item !== user[i])
+                            nameNew = nameNew.filter(item => item !== user[i].secondName + ' ' + user[i].firstName)
+                        }
+                    }
+                }
+
+                this.items = nameNew
+                this.valueCategory = userNew
+
+                this.countUsers = this.tournament.peopleInfo.length
+
+                let member = this.tournament.peopleInfo
+
+                let array = member; //массив, можно использовать массив объектов
+                let size = 2; //размер подмассива
+                let subarray = []; //массив в который будет выведен результат.
+                for (let i = 0; i <Math.ceil(array.length/size); i++){
+                    subarray[i] = array.slice((i*size), (i*size) + size);
+                }
+
+                this.firstBlock = subarray.slice(0,subarray.length/2);
+                this.secondBlock = subarray.slice(subarray.length/2,subarray.length);
+
+                this.leftNumber2 = Math.round(this.firstBlock.length/2)
+                this.rightNumber2 = Math.round(this.secondBlock.length/2)
+            },
+            async firstRoundLeft(e) {
+                let number = e.target.childNodes[1].innerHTML
+                let valueHtml = e.target.innerHTML
+
+                if (number == 1) {
+                    let all = document.getElementsByClassName("matchup");
+
+                    for (let i=0, max=all.length; i < max; i++) {
+                        if (all[i].dataset.number == 'r2left1') {
+                            all[i].childNodes[0].innerHTML = valueHtml
+                        }
+                    }
+
+                    this.champions['r2left1Top'] = valueHtml
+                }
+
+                if (number == 2) {
+                    let all = document.getElementsByClassName("matchup");
+
+                    for (let i=0, max=all.length; i < max; i++) {
+                        if (all[i].dataset.number == 'r2left1') {
+                            all[i].childNodes[1].innerHTML = valueHtml
+                        }
+                    }
+
+                    this.champions['r2left1Bot'] = valueHtml
+                }
+
+                if (number == 3) {
+                    let all = document.getElementsByClassName("matchup");
+
+                    for (let i=0, max=all.length; i < max; i++) {
+                        if (all[i].dataset.number == 'r2left2') {
+
+                            all[i].childNodes[0].innerHTML = valueHtml
+                        }
+                    }
+
+                    this.champions['r2left2Top'] = valueHtml
+                }
+
+                if (number == 4) {
+                    let all = document.getElementsByClassName("matchup");
+
+                    for (let i=0, max=all.length; i < max; i++) {
+                        if (all[i].dataset.number == 'r2left2') {
+                            all[i].childNodes[1].innerHTML = valueHtml
+                        }
+                    }
+
+                    this.champions['r2left2Bot'] = valueHtml
+                }
+            },
+            async firstRoundRight(e) {
+                let number = e.target.childNodes[1].innerHTML
+                let valueHtml = e.target.innerHTML
+
+                if (number == 1) {
+                    let all = document.getElementsByClassName("matchup");
+
+                    for (let i=0, max=all.length; i < max; i++) {
+                        if (all[i].dataset.number == 'r2right1') {
+                            all[i].childNodes[0].innerHTML = valueHtml
+                        }
+                    }
+
+                    this.champions['r2right1Top'] = valueHtml
+                }
+
+                if (number == 2) {
+                    let all = document.getElementsByClassName("matchup");
+
+                    for (let i=0, max=all.length; i < max; i++) {
+                        if (all[i].dataset.number == 'r2right1') {
+                            all[i].childNodes[1].innerHTML = valueHtml
+                        }
+                    }
+
+                    this.champions['r2right1Bot'] = valueHtml
+                }
+
+                if (number == 3) {
+                    let all = document.getElementsByClassName("matchup");
+
+                    for (let i=0, max=all.length; i < max; i++) {
+                        if (all[i].dataset.number == 'r2right2') {
+
+                            all[i].childNodes[0].innerHTML = valueHtml
+                        }
+                    }
+
+                    this.champions['r2right2Top'] = valueHtml
+                }
+
+                if (number == 4) {
+                    let all = document.getElementsByClassName("matchup");
+
+                    for (let i=0, max=all.length; i < max; i++) {
+                        if (all[i].dataset.number == 'r2right2') {
+                            all[i].childNodes[1].innerHTML = valueHtml
+                        }
+                    }
+
+                    this.champions['r2right2Bot'] = valueHtml
+                }
+            },
+            async secondRoundLeft(e) {
+                let number = e.target.childNodes[1].innerHTML
+                let valueHtml = e.target.innerHTML
+
+                if (number == 1 || number == 2) {
+                    let all = document.getElementsByClassName("matchup");
+
+                    for (let i=0, max=all.length; i < max; i++) {
+                        if (all[i].dataset.number == 'r3left1') {
+                            all[i].childNodes[0].innerHTML = valueHtml
+                        }
+                    }
+
+                    this.champions['r3left1Top'] = valueHtml
+                }
+
+                if (number == 3 || number == 4) {
+                    let all = document.getElementsByClassName("matchup");
+
+                    for (let i=0, max=all.length; i < max; i++) {
+                        if (all[i].dataset.number == 'r3left2') {
+                            all[i].childNodes[0].innerHTML = valueHtml
+                        }
+                    }
+
+                    this.champions['r3left1Bot'] = valueHtml
+                }
+            },
+            async secondRoundRight(e) {
+                let number = e.target.childNodes[1].innerHTML
+                let valueHtml = e.target.innerHTML
+
+                if (number == 1 || number == 2) {
+                    let all = document.getElementsByClassName("matchup");
+
+                    for (let i=0, max=all.length; i < max; i++) {
+                        if (all[i].dataset.number == 'r3left1') {
+                            all[i].childNodes[1].innerHTML = valueHtml
+                        }
+                    }
+
+                    this.champions['r3right1Top'] = valueHtml
+                }
+
+                if (number == 3 || number == 4) {
+                    let all = document.getElementsByClassName("matchup");
+
+                    for (let i=0, max=all.length; i < max; i++) {
+                        if (all[i].dataset.number == 'r3left2') {
+                            all[i].childNodes[1].innerHTML = valueHtml
+                        }
+                    }
+
+                    this.champions['r3right1Bot'] = valueHtml
+                }
+            },
+            async thirdRoundLeft(e) {
+                let number = e.target.childNodes[1].innerHTML
+                let valueHtml = e.target.innerHTML
+
+                if (number == 1 || number == 2) {
+                    let all = document.getElementsByClassName("matchup");
+
+                    for (let i=0, max=all.length; i < max; i++) {
+                        if (all[i].dataset.number == 'r4') {
+                            all[i].childNodes[0].innerHTML = valueHtml
+                        }
+                    }
+
+                    this.champions['r4Top'] = valueHtml
+                }
+            },
+            async thirdRoundRight(e) {
+                let number = e.target.childNodes[1].innerHTML
+                let valueHtml = e.target.innerHTML
+
+                if (number == 3 || number == 4) {
+                    let all = document.getElementsByClassName("matchup");
+
+                    for (let i=0, max=all.length; i < max; i++) {
+                        if (all[i].dataset.number == 'r4') {
+                            all[i].childNodes[1].innerHTML = valueHtml
+                        }
+                    }
+
+                    this.champions['r4Bot'] = valueHtml
+                }
+            },
+            async final(e) {
+                let valueHtml = e.target.innerHTML
+
+                let all = document.getElementsByClassName("matchup");
+
+                for (let i=0, max=all.length; i < max; i++) {
+                    all[i].classList.remove('active');
+                }
+
+                e.target.classList.add('active');
+
+                this.champions['final'] = valueHtml
+                this.champions['finalClass'] = 'active'
+            },
+            async saveResults() {
+                let tournamentId = this.$route.params.id
+
+                await this.$store.dispatch('updateTournamentPleiOff', {
+                    champions: this.champions,
+                    id: tournamentId
+                })
+            }
         }
     }
 </script>
@@ -230,9 +686,9 @@
     .matchup {margin:0;width: 100%;padding: 10px 0;height:60px;-webkit-transition: all 0.2s;transition: all 0.2s;}
     .score {font-size: 11px;text-transform: uppercase;float: right;color: #2C7399;font-weight: bold;font-family: 'Roboto Condensed', sans-serif;position: absolute;right: 5px;}
     .team {padding: 0 5px;margin: 3px 0;height: 25px; line-height: 25px;white-space: nowrap; overflow: hidden;position: relative;}
-    .round-two .matchup {margin:0; height: 60px;padding: 50px 0;}
+    .round-two .matchup {margin:0; height: 60px; padding: 40px 0;margin-bottom: 37px;}
     .round-three .matchup {margin:0; height: 60px; padding: 130px 0;}
-    .round-details {font-family: 'Roboto Condensed', sans-serif; font-size: 13px; color: #2C7399;text-transform: uppercase;text-align: center;height: 40px;}
+    .round-details {font-family: 'Roboto Condensed', sans-serif; font-size: 13px; color: #2C7399;text-transform: uppercase;text-align: center;height: 15px;}
     .champion li, .round li {background-color: #fff;box-shadow: none; opacity: 0.45;}
     .current li {opacity: 1;}
     .current li.team {background-color: #fff;box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);opacity: 1;}
@@ -240,7 +696,7 @@
     .share .container {margin: 0 auto; text-align: center;}
     .share-icon {font-size: 24px; color: #fff;padding: 25px;}
     .share-wrap {max-width: 1100px; text-align: center; margin: 60px auto;}
-    .final {margin: 4.5em 0;}
+    .final {margin: 2.5em 0;}
 
     @-webkit-keyframes pulse {
         0% {
@@ -317,5 +773,25 @@
         .hero-wrap {padding: 2.5em;}
         .hero p.year {margin: 5px 0 10px; font-size: 18px;}
 
+    }
+
+    .profile__block-btn {
+        display: flex;
+        justify-content: space-between;
+        margin: 30px auto 0;
+        max-width: 700px;
+    }
+
+    .profile__btn {
+        color: #fff;
+        min-width: 260px !important;
+    }
+
+    .team {
+        text-align: left;
+    }
+
+    .team.active {
+        border: 1px solid green;
     }
 </style>

@@ -45,4 +45,8 @@
   input[type=number] {
     -moz-appearance: textfield;
   }
+
+  .v-date-picker-table .v-btn.v-btn--active {
+    color: #76B7CA !important;
+  }
 </style>

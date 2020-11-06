@@ -12,11 +12,11 @@
 
             <v-spacer></v-spacer>
 
-            <v-btn icon>
+            <v-btn icon to="/profile">
                 <v-icon>mdi-motorbike</v-icon>
             </v-btn>
 
-            <v-btn icon>
+            <v-btn icon to="/tournament">
                 <v-icon>mdi-traffic-cone</v-icon>
             </v-btn>
 
@@ -35,12 +35,8 @@
                 </template>
 
                 <v-list>
-                    <v-list-item
-                            v-for="n in 5"
-                            :key="n"
-                            @click="() => {}"
-                    >
-                        <v-list-item-title>Option {{ n }}</v-list-item-title>
+                    <v-list-item @click="exitButton">
+                        <v-list-item-title>Выйти <v-icon>mdi-exit-to-app</v-icon></v-list-item-title>
                     </v-list-item>
                 </v-list>
             </v-menu>
@@ -54,15 +50,17 @@
     export default {
         data () {
             return {
-                drawer: false,
-                items: [
-                    { title: 'Home', icon: 'dashboard' },
-                    { title: 'About', icon: 'question_answer' },
-                ],
+                drawer: false
             }
         },
         components: {
             Drawer
+        },
+        methods: {
+            async exitButton () {
+                await this.$store.dispatch('logout')
+                this.$router.push('/login')
+            }
         },
     }
 </script>

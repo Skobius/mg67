@@ -152,7 +152,6 @@
                     for (let j = 0; j < checkCategory.length; j++) {
                         if (user[i].id == checkCategory[j]) {
                             if (this.tournamentType == 'Стандартный с разделением на категории') {
-                                console.log(1)
                                 if (user[i].category == 'N' || user[i].category == 'D4') {
                                     peopleInfo.push({
                                         id: user[i].id,
@@ -240,8 +239,6 @@
             let user = await this.$store.dispatch('fetchAllUser')
             this.items = name
             this.valueCategory = user
-
-            console.log(this.items)
         },
     }
 </script>

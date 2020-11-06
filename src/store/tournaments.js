@@ -38,5 +38,13 @@ export default {
                 throw e
             }
         },
+        async updateTournamentPleiOff({commit, dispatch}, {id, champions}) {
+            try {
+                await firebase.database().ref(`/tournaments`).child(id).update({champions})
+            } catch (e) {
+                alert(e)
+                throw e
+            }
+        },
     }
 }
